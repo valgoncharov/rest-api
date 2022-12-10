@@ -8,35 +8,31 @@ import static io.restassured.http.ContentType.JSON;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.is;
 
-public class ReqresInTest {
+public class ReqresInTest extends TestBase {
 
     @Test
     void getListUsersTest() {
         given()
-                .get("https://reqres.in/api/users?page=2")
+                .get(getUsers)
                 .then()
                 .statusCode(200)
                 .body("total_pages", is(2));
-
-
     }
 
     @Test
     void getSingleUsersTest() {
         given()
-                .get("https://reqres.in/api/users/2")
+                .get(getUsers)
                 .then()
                 .log().all()
                 .statusCode(200)
                 .body("data.id", is(2));
-
-
     }
 
     @Test
     void getSingleUsersNotFoundTest() {
         given()
-                .get("https://reqres.in/api/users/23")
+                .get(getSingleUsers)
                 .then()
                 .statusCode(404);
     }
@@ -44,7 +40,7 @@ public class ReqresInTest {
     @Test
     void getListResourceTest() {
         given()
-                .get("https://reqres.in/api/unknown")
+                .get(getList)
                 .then()
                 .log().all()
                 .assertThat().statusCode(200)
@@ -62,7 +58,7 @@ public class ReqresInTest {
                 .log().uri()
                 .body(data)
                 .when()
-                .post("https://reqres.in/api/login")
+                .post(postLogin)
                 .then()
                 .log().all()
                 .log().status()
@@ -84,7 +80,7 @@ public class ReqresInTest {
                 .contentType(JSON)
                 .body(data)
                 .when()
-                .post("https://reqres.in/api/login")
+                .post(postLogin)
                 .then()
                 .log().all()
                 .log().status()
@@ -105,7 +101,7 @@ public class ReqresInTest {
                 .contentType(JSON)
                 .body(data)
                 .when()
-                .post("https://reqres.in/api/login")
+                .post(postLogin)
                 .then()
                 .log().all()
                 .log().status()
@@ -127,7 +123,7 @@ public class ReqresInTest {
                 .contentType(JSON)
                 .body(data)
                 .when()
-                .post("https://reqres.in/api/users")
+                .post(postCreate)
                 .then()
                 .log().all()
                 .log().status()
@@ -148,7 +144,7 @@ public class ReqresInTest {
                 .contentType(JSON)
                 .body("{\"name\": \"" + userName + "\",\"character\": \"" + userLebowski + "\"}")
                 .when()
-                .post("https://reqres.in/api/users")
+                .post("postCreate")
                 .then()
                 .log().all()
                 .log().status()
@@ -167,7 +163,7 @@ public class ReqresInTest {
                 .log().uri()
                 .contentType(JSON)
                 .when()
-                .delete("https://reqres.in/api/users/2")
+                .delete(deleteUser)
                 .then()
                 .log().all()
                 .log().status()
@@ -183,12 +179,11 @@ public class ReqresInTest {
                 .log().uri()
                 .contentType(JSON)
                 .when()
-                .delete("https://reqres.in/api/users/2")
+                .delete(deleteUser)
                 .then()
                 .log().all()
                 .log().status()
 
                 .assertThat().statusCode(204);
     }
-
 }
